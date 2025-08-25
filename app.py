@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify, render_template
 from werkzeug.utils import secure_filename
 from celery import Celery, Task
 from celery.result import AsyncResult
+from kombu.exceptions import OperationalError
 import uuid
 
 # --- App and Celery Configuration ---
@@ -67,14 +68,20 @@ def upload_file():
         stop_words_str = request.form.get('stop_words', '')
 
         # Start the background task
-        task = process_audio_task.delay(
-            filepath=filepath,
-            model_name=model_name,
-            start_words_str=start_words_str,
-            stop_words_str=stop_words_str
-        )
-
-        return jsonify({'task_id': task.id}), 202
+        try:
+            task = process_audio_task.delay(
+                filepath=filepath,
+                model_name=model_name,
+                start_words_str=start_words_str,
+                stop_words_str=stop_words_str
+            )
+            return jsonify({'task_id': task.id}), 202
+        except OperationalError as e:
+            # This typically happens if the connection to Redis fails.
+            app.logger.error(f"Celery OperationalError: {e}")
+            return jsonify({
+                'error': 'Не удалось подключиться к очереди задач (Redis). Убедитесь, что Redis запущен.'
+            }), 503 # Service Unavailable
 
 
 @app.route('/status/<task_id>')
