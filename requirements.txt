@@ -3,6 +3,8 @@ celery
 redis
 openai-whisper
 torch
-transformers
+transformers==4.33.1
+accelerate==0.22.0
+huggingface-hub==0.17.1
 sentencepiece
-accelerate
+protobuf
