@@ -5,6 +5,7 @@ from transformers import T5ForConditionalGeneration, T5Tokenizer
 from celery import shared_task
 import re
 import logging
+import subprocess
 
 # --- Setup Logging ---
 logging.basicConfig(level=logging.INFO)
@@ -63,6 +64,20 @@ def generate_timestamped_text(segments):
         text += f"{start_time} --> {end_time}\n{segment['text'].strip()}\n\n"
     return text
 
+def check_ffmpeg():
+    """Checks if ffmpeg is installed and available in the system's PATH."""
+    try:
+        # We run `ffmpeg -version`, sending stdout and stderr to DEVNULL to keep it quiet.
+        subprocess.run(["ffmpeg", "-version"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        logger.info("ffmpeg check successful.")
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        logger.error("ffmpeg not found. Please install ffmpeg and ensure it is in your system's PATH.")
+        raise RuntimeError(
+            "FFmpeg не найден. "
+            "Пожалуйста, установите FFmpeg и убедитесь, что он доступен в системной переменной PATH. "
+            "Инструкции по установке можно найти в AGENTS.md."
+        )
+
 def summarize_text(text):
     """Summarizes text using the FRED-T5 model."""
     # The model expects a prefix "summarize: "
@@ -94,6 +109,9 @@ def process_audio_task(self, filepath, model_name, start_words_str, stop_words_s
     'bind=True' gives us access to 'self' for status updates.
     """
     try:
+        # 0. Check for dependencies
+        check_ffmpeg()
+
         # 1. Update Status: Loading models
         self.update_state(state='PROGRESS', meta={'progress': 5, 'status': 'Загрузка моделей...'})
 

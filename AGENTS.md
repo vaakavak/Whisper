@@ -11,6 +11,10 @@
   - Для Windows можно использовать [Memurai](https://www.memurai.com/) или WSL.
   - Для macOS: `brew install redis` и `brew services start redis`.
   - Для Debian/Ubuntu: `sudo apt-get update && sudo apt-get install redis-server`.
+- **FFmpeg**: Это сторонняя утилита, которая необходима `openai-whisper` для обработки и конвертации аудиофайлов.
+  - Для Windows: Скачайте сборку с официального сайта [ffmpeg.org](https://ffmpeg.org/download.html), распакуйте архив и добавьте путь к папке `bin` в системную переменную `PATH`.
+  - Для macOS: `brew install ffmpeg`.
+  - Для Debian/Ubuntu: `sudo apt-get update && sudo apt-get install ffmpeg`.
 
 ## 2. Установка зависимостей
 
