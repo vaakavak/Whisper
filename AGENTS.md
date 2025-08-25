@@ -7,10 +7,16 @@
 Перед началом убедитесь, что у вас установлены:
 - **Python 3.8+**
 - **pip** (менеджер пакетов Python)
-- **Redis**: Это система управления базами данных, которая используется в качестве брокера сообщений для Celery. Её необходимо установить и запустить.
-  - Для Windows можно использовать [Memurai](https://www.memurai.com/) или WSL.
-  - Для macOS: `brew install redis` и `brew services start redis`.
-  - Для Debian/Ubuntu: `sudo apt-get update && sudo apt-get install redis-server`.
+- **Redis**: Это система управления базами данных, которая используется в качестве брокера сообщений для Celery. Её необходимо установить и **запустить перед стартом приложения**.
+  - **Windows**:
+    - **Рекомендуемый способ**: Установите [Memurai](https://www.memurai.com/). После установки он, как правило, запускается автоматически как служба Windows. Проверить это можно, открыв "Службы" (`services.msc`), найдя в списке "Memurai" и убедившись, что его статус "Выполняется".
+    - **Альтернативный способ (WSL)**: Если вы используете подсистему Windows для Linux (например, Ubuntu), установите Redis в ней (`sudo apt-get install redis-server`), а затем запустите его командой `sudo service redis-server start`.
+  - **macOS**:
+    - Установка: `brew install redis`.
+    - Запуск (в фоновом режиме): `brew services start redis`.
+  - **Debian/Ubuntu**:
+    - Установка: `sudo apt-get update && sudo apt-get install redis-server`.
+    - Сервер обычно запускается автоматически. Проверить статус можно командой `sudo systemctl status redis-server`. Если он не запущен, используйте `sudo systemctl start redis-server`.
 - **FFmpeg**: Это сторонняя утилита, которая необходима `openai-whisper` для обработки и конвертации аудиофайлов.
   - Для Windows: Скачайте сборку с официального сайта [ffmpeg.org](https://ffmpeg.org/download.html), распакуйте архив и добавьте путь к папке `bin` в системную переменную `PATH`.
   - Для macOS: `brew install ffmpeg`.
