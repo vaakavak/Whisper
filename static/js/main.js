@@ -1,6 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-    console.log('DOM Content Loaded and script running.');
-
     // --- DOM Element References ---
     const uploadForm = document.getElementById('upload-form');
     const dropZone = document.getElementById('drop-zone');
@@ -22,41 +20,30 @@ document.addEventListener('DOMContentLoaded', function () {
     // --- Drag and Drop Logic ---
     dropZone.addEventListener('dragover', (e) => {
         e.preventDefault();
-        console.log('Drag over event fired.');
         dropZone.classList.add('dragover');
     });
 
     dropZone.addEventListener('dragleave', (e) => {
         e.preventDefault();
-        console.log('Drag leave event fired.');
         dropZone.classList.remove('dragover');
     });
 
     dropZone.addEventListener('drop', (e) => {
         e.preventDefault();
-        console.log('Drop event fired.');
         dropZone.classList.remove('dragover');
         const files = e.dataTransfer.files;
-        console.log('Files dropped:', files);
         if (files.length > 0) {
             audioFileInput.files = files;
             updateFileName();
         }
     });
 
-    audioFileInput.addEventListener('change', function() {
-        console.log('File input change event fired.');
-        console.log('Files selected:', audioFileInput.files);
-        updateFileName();
-    });
+    audioFileInput.addEventListener('change', updateFileName);
 
     function updateFileName() {
-        console.log('updateFileName function called.');
         if (audioFileInput.files.length > 0) {
-            console.log('File detected:', audioFileInput.files[0].name);
             fileNameDisplay.textContent = `Выбранный файл: ${audioFileInput.files[0].name}`;
         } else {
-            console.log('No file detected.');
             fileNameDisplay.textContent = '';
         }
     }

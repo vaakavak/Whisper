@@ -1,5 +1,6 @@
 import os
 from flask import Flask, request, jsonify, render_template
+from werkzeug.utils import secure_filename
 from celery import Celery, Task
 from celery.result import AsyncResult
 import uuid
@@ -55,7 +56,8 @@ def upload_file():
 
     if file:
         # Securely save the uploaded file
-        filename = f"{uuid.uuid4()}_{file.filename}"
+        safe_filename = secure_filename(file.filename)
+        filename = f"{uuid.uuid4()}_{safe_filename}"
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
 
