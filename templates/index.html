@@ -19,10 +19,10 @@
                     <!-- File Upload -->
                     <div class="mb-3">
                         <label for="audio-file" class="form-label">Выберите аудиофайл или перетащите его сюда</label>
-                        <div id="drop-zone" class="drop-zone">
+                        <label for="audio-file" id="drop-zone" class="drop-zone">
                             <p>Перетащите файл сюда или нажмите для выбора</p>
-                            <input type="file" id="audio-file" name="audio_file" class="form-control" accept="audio/*" required>
-                        </div>
+                        </label>
+                        <input type="file" id="audio-file" name="audio_file" class="d-none" accept="audio/*" required>
                         <p id="file-name" class="mt-2"></p>
                     </div>
 

@@ -18,8 +18,6 @@ document.addEventListener('DOMContentLoaded', function () {
     let progressInterval = null;
 
     // --- Drag and Drop Logic ---
-    dropZone.addEventListener('click', () => audioFileInput.click());
-
     dropZone.addEventListener('dragover', (e) => {
         e.preventDefault();
         dropZone.classList.add('dragover');
