@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Транскрибация и Суммаризация Аудио</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header text-center">
+                <h2>Сервис Транскрибации Аудио</h2>
+            </div>
+            <div class="card-body">
+                <!-- Main Form -->
+                <form id="upload-form" enctype="multipart/form-data">
+                    <!-- File Upload -->
+                    <div class="mb-3">
+                        <label for="audio-file" class="form-label">Выберите аудиофайл или перетащите его сюда</label>
+                        <div id="drop-zone" class="drop-zone">
+                            <p>Перетащите файл сюда или нажмите для выбора</p>
+                            <input type="file" id="audio-file" name="audio_file" class="form-control" accept="audio/*" required>
+                        </div>
+                        <p id="file-name" class="mt-2"></p>
+                    </div>
+
+                    <!-- Model Selection -->
+                    <div class="mb-3">
+                        <label for="model-select" class="form-label">Выберите модель</label>
+                        <select class="form-select" id="model-select" name="model">
+                            <option value="small">Small</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="large">Large</option>
+                        </select>
+                    </div>
+
+                    <!-- Start/Stop Words -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="start-words" class="form-label">Стар-слова (остановить транскрипцию при нахождении, через запятую)</label>
+                            <input type="text" class="form-control" id="start-words" name="start_words" placeholder="например, стоп, хватит">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="stop-words" class="form-label">Стоп-слова (удалить из текста, через запятую)</label>
+                            <input type="text" class="form-control" id="stop-words" name="stop_words" placeholder="например, эмм, как бы">
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex justify-content-center gap-2">
+                        <button type="submit" id="submit-btn" class="btn btn-primary">Загрузить и обработать</button>
+                        <button type="button" id="clear-btn" class="btn btn-secondary">Очистить</button>
+                        <button type="button" id="cancel-btn" class="btn btn-danger d-none">Отменить</button>
+                    </div>
+                </form>
+
+                <!-- Progress Bar -->
+                <div id="progress-container" class="mt-4 d-none">
+                    <div class="progress">
+                        <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                    </div>
+                    <p id="progress-status" class="text-center mt-2"></p>
+                </div>
+
+                <!-- Results Section -->
+                <div id="results-container" class="mt-4 d-none">
+                    <h3>Результаты</h3>
+                    <ul class="nav nav-tabs" id="results-tabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="transcription-tab" data-bs-toggle="tab" data-bs-target="#transcription" type="button" role="tab" aria-controls="transcription" aria-selected="true">Транскрипция</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="timestamps-tab" data-bs-toggle="tab" data-bs-target="#timestamps" type="button" role="tab" aria-controls="timestamps" aria-selected="false">Транскрипция с метками</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="summary-tab" data-bs-toggle="tab" data-bs-target="#summary" type="button" role="tab" aria-controls="summary" aria-selected="false">Суммаризация</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="results-tabs-content">
+                        <div class="tab-pane fade show active" id="transcription" role="tabpanel" aria-labelledby="transcription-tab">
+                            <textarea class="form-control result-text" rows="10" readonly></textarea>
+                            <button class="btn btn-success mt-2 save-btn" data-target="transcription">Сохранить (.txt)</button>
+                        </div>
+                        <div class="tab-pane fade" id="timestamps" role="tabpanel" aria-labelledby="timestamps-tab">
+                             <textarea class="form-control result-text" rows="10" readonly></textarea>
+                            <button class="btn btn-success mt-2 save-btn" data-target="timestamps">Сохранить (.txt)</button>
+                        </div>
+                        <div class="tab-pane fade" id="summary" role="tabpanel" aria-labelledby="summary-tab">
+                             <textarea class="form-control result-text" rows="10" readonly></textarea>
+                            <button class="btn btn-success mt-2 save-btn" data-target="summary">Сохранить (.txt)</button>
+                        </div>
+                    </div>
+                    <div class="text-center mt-3">
+                        <button id="process-another-btn" class="btn btn-info">Обработать еще</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

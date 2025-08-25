@@ -1,0 +1,8 @@
+Flask
+celery
+redis
+openai-whisper
+torch
+transformers
+sentencepiece
+accelerate
